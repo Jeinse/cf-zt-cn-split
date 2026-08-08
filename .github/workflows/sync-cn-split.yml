@@ -28,7 +28,7 @@ jobs:
           CF_PROFILE_ID: ${{ secrets.CF_PROFILE_ID }}
           MODE: exclude
           # 新增：控制是否更新分流规则，true/false
-          RUN_UPDATE: false
+          RUN_UPDATE: ${{ secrets.RUN_UPDATE }}
           # 新增：指定要更新的策略序号，逗号分隔（0=默认策略，1~N=自定义策略），空=不更新
           CF_PROFILE_INDEX: "1"
         run: python cf-zt-cn-split.py
