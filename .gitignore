@@ -1,0 +1,104 @@
+# ===================== 项目自定义目录 =====================
+mycf/
+web/node_modules/
+web/dist/
+
+# ===================== 项目自定义文件 =====================
+**/.env
+
+# ===================== Go 编译产物 =====================
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.prof
+*.pprof
+go.work
+
+# 编译输出目录
+bin/
+build/
+dist/
+
+# ===================== 环境&敏感配置 =====================
+.env
+.env.*
+keys.txt
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+secrets/
+config/secrets/
+config.local.json
+config.local.yaml
+config.local.yml
+
+# ===================== 日志、临时、运行数据 =====================
+*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+tmp/
+temp/
+local/
+dev/
+data/
+
+# ===================== 测试覆盖率/测试产物 =====================
+coverage/
+*.lcov
+test-results/
+test-output/
+
+# ===================== 数据库、备份、压缩包 =====================
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.backup
+*.old
+*.7z *.dmg *.gz *.iso *.jar *.rar *.tar *.zip
+
+# ===================== IDE 编辑器文件 =====================
+# VSCode
+.vscode/
+*.code-workspace
+# JetBrains GoLand
+.idea/
+*.iml *.ipr *.iws
+# Vim
+*.swp *.swo
+# Emacs
+*~
+\#*\#
+.\#*
+auto-save-list
+tramp
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# ===================== 系统生成垃圾文件 =====================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===================== 其他工具无关文件 =====================
+# Terraform（不用则删除）
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+# K8s/Helm（不用则删除）
+*.kubeconfig
+charts/*.tgz

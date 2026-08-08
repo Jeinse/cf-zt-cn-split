@@ -1,0 +1,19 @@
+# Cloudflare认证密钥
+CF_API_TOKEN=xxx
+# Cloudflare全局公共账号ID，所有策略共用此账号
+CF_ACCOUNT_ID=xxx
+# 策略ID注释：
+# 默认 序号0（仅切换，无法更新）
+# 邮箱xxx 序号1
+# 安卓xxx 序号2
+# 苹果xxx 序号3
+# 电脑xxx 序号4
+CF_PROFILE_ID=xxx,xxx,xxx,xxx
+# 分流模式 exclude=排除国内直连 / include=仅国内流量
+MODE=exclude
+
+# 功能开关1：是否更新指定序号策略内的分流规则
+RUN_UPDATE=true
+# 指定需要更新的策略序号，多个用逗号分隔；空=不更新任何自定义策略
+# 示例：仅更新序号1邮箱、3苹果策略
+CF_PROFILE_INDEX=3
