@@ -90,30 +90,50 @@ def update_split_tunnels(cidrs, domains):
 
 
 def update_fallback_domains(domains):
-    """覆写 Local Domain Fallback 列表"""
+    """覆写 Local Domain Fallback 列表（保留原有/默认条目）"""
     print("\n🚀 [2/2] 开始更新 Local Domain Fallback...")
-
-    dns_servers = [s.strip() for s in LDF_DNS_SERVER.split(",") if s.strip()] if LDF_DNS_SERVER else []
-
-    # LDF 格式：{"suffix": "example.com", "description": "..."}
-    ldf_entries = []
-    for d in domains[:MAX_LDF_RULES]:
-        entry = {
-            "suffix": d,
-            "description": "CN Local Fallback"
-        }
-        if dns_servers:
-            entry["dns_server"] = dns_servers
-        ldf_entries.append(entry)
-
-    print(f"   准备写入 {len(ldf_entries)} 条 Local Domain Fallback 规则 (上限: {MAX_LDF_RULES})")
 
     if PROFILE_ID:
         url = f"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/devices/policy/{PROFILE_ID}/fallback_domains"
     else:
         url = f"https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/devices/policy/fallback_domains"
 
-    resp = requests.put(url, json=ldf_entries, headers=HEADERS)
+    # 1. 先获取现有的 LDF 列表，保留系统默认规则和手动添加的规则
+    preserved_entries = []
+    try:
+        get_resp = requests.get(url, headers=HEADERS, timeout=15)
+        if get_resp.status_code == 200:
+            current_entries = get_resp.json().get("result", [])
+            # 过滤掉上次脚本生成的条目，保留 Cloudflare 默认规则（如 *.local, *.lan 等）
+            preserved_entries = [
+                e for e in current_entries 
+                if e.get("description") != "CN Local Fallback"
+            ]
+            print(f"   找到并保留 {len(preserved_entries)} 条系统默认/自定义规则")
+    except Exception as e:
+        print(f"⚠️ 获取现有 Fallback 列表失败，将跳过合并直接写入新规则: {e}")
+
+    # 2. 计算可用于 CN 域名的剩余配额
+    available_quota = max(0, MAX_LDF_RULES - len(preserved_entries))
+    dns_servers = [s.strip() for s in LDF_DNS_SERVER.split(",") if s.strip()] if LDF_DNS_SERVER else []
+
+    # 3. 构建新的 CN 域名条目
+    cn_entries = []
+    for d in domains[:available_quota]:
+        entry = {
+            "suffix": d,
+            "description": "CN Local Fallback"
+        }
+        if dns_servers:
+            entry["dns_server"] = dns_servers
+        cn_entries.append(entry)
+
+    # 4. 合并“默认/原有规则”与“新 CN 规则”
+    final_entries = preserved_entries + cn_entries
+    print(f"   默认/原有规则：{len(preserved_entries)} 条 | CN 规则：{len(cn_entries)} 条 | 合计提交：{len(final_entries)} 条 (限制: {MAX_LDF_RULES})")
+
+    # 5. 提交更新
+    resp = requests.put(url, json=final_entries, headers=HEADERS)
     if resp.status_code in (200, 204):
         print(f"✅ Local Domain Fallback 同步成功！")
     else:
