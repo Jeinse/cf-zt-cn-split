@@ -12,8 +12,8 @@ ALLOWED_MODES  = {"exclude", "include"}
 ENABLE_SPLIT_TUNNEL = os.getenv("ENABLE_SPLIT_TUNNEL", "true").lower() == "true"
 ENABLE_LDF          = os.getenv("ENABLE_LDF", "true").lower() == "true"
 
-MAX_SPLIT_RULES     = 4000  # Split Tunnel 总上限
-TARGET_DOMAIN_N     = 1000     # Split Tunnel 中分配给域名的配额
+MAX_SPLIT_RULES     = 50000  # Split Tunnel 总上限
+TARGET_DOMAIN_N     = 50000     # Split Tunnel 中分配给域名的配额
 
 MAX_LDF_RULES       = int(os.getenv("MAX_LDF_RULES", "50000"))  # LDF 建议限制在 100~500 以内
 LDF_DNS_SERVER      = os.getenv("LDF_DNS_SERVER", "")         # 可选：强行指定 LDF 的 DNS IP，如 "223.5.5.5,223.6.6.6"
