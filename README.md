@@ -68,6 +68,7 @@ Loyalsoldier/surge-rules (direct.txt)     soffchen/GeoIP2-CN (CN-ip-cidr.txt)
 |`CF_PROFILE_ID`|设备策略 ID，留空则使用默认策略                                         |❌可选  |
 |`MODE`         |分流模式：`exclude`（CN 直连）或 `include`（仅 CN 走 WARP），默认 `exclude`|❌可选  |
 
+环境变量默认值说明ENABLE_SPLIT_TUNNELtrue是否更新 Split Tunnels 拆分隧道。ENABLE_LDFtrue是否更新 Local Domain Fallback 回退域名。MAX_LDF_RULES200控制写进 Local Domain Fallback 的最大域名条数（防止超过 API 限制）。LDF_DNS_SERVER(为空)填入 IP（如 223.5.5.5），强制要求回退域名使用该 IP 解析；留空则默认使用客户端所在局域网网卡的 DNS。
 #### 如何获取 API Token
 
 1. 前往 [Cloudflare Dashboard → API Tokens](https://dash.cloudflare.com/profile/api-tokens)
